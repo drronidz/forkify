@@ -1,0 +1,26 @@
+{
+  "name": "forkify",
+  "version": "1.0.0",
+  "description": "Recipe applicatin",
+  "index": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drronidz/forkify.git"
+  },
+  "author": "drronidz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drronidz/forkify/issues"
+  },
+  "homepage": "https://github.com/drronidz/forkify#readme",
+  "devDependencies": {
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@parcel/transformer-sass": "^2.0.0-rc.0",
+    "parcel": "^2.0.0-rc.0",
+    "sass": "^1.42.1"
+  }
+}
