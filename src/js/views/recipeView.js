@@ -2,8 +2,6 @@
 import icons from 'url:../../img/icons.svg' // Parcel 2
 import {Fraction} from 'fractional'
 
-console.log(Fraction)
-console.log(new Fraction(0.5).toString())
 class RecipeView {
     #parentElement = document.querySelector('.recipe');
     #recipeDATA
