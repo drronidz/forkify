@@ -8,8 +8,8 @@ export const getJSON = async function (url) {
         if(!response.ok) throw new Error(`${data.message} (${response.status})`)
         return data
     }
-    catch (e) {
-        alert(e)
+    catch (error) {
+        throw error
     }
 }
 
