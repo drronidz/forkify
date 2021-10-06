@@ -1,7 +1,7 @@
 {
   "name": "forkify",
   "version": "1.0.0",
-  "description": "Recipe applicatin",
+  "description": "Recipe Application",
   "index": "index.html",
   "scripts": {
     "start": "parcel index.html",
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/drronidz/forkify.git"
   },
   "author": "drronidz",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/drronidz/forkify/issues"
   },
@@ -20,7 +20,11 @@
   "devDependencies": {
     "@parcel/transformer-image": "^2.0.0-rc.0",
     "@parcel/transformer-sass": "^2.0.0-rc.0",
-    "parcel": "^2.0.0-rc.0",
-    "sass": "^1.42.1"
+    "parcel": "^2.0.0-beta.1",
+    "sass": "^1.26.10"
+  },
+  "dependencies": {
+    "core-js": "^3.18.2",
+    "regenerator-runtime": "^0.13.9"
   }
 }
