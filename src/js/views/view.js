@@ -31,7 +31,7 @@ export default class View {
             // Update changed TEXT
             if(!newElement.isEqualNode(currentElement) &&
                 newElement.firstChild?.nodeValue.trim() !== '') {
-                console.log('*', newElement.firstChild.nodeValue.trim())
+                // console.log('*', newElement.firstChild.nodeValue.trim())
                 currentElement.textContent = newElement.textContent
             }
 
