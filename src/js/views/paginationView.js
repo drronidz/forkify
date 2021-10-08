@@ -8,6 +8,7 @@ class PaginationView extends View{
         const currentPage = this._recipeDATA.page
         const numberOfPages = Math.ceil(this._recipeDATA.results.length / this._recipeDATA.resultsPerPage)
         console.log(numberOfPages)
+
         // Page 1, and there are other pages
         if(currentPage === 1 && numberOfPages > 1) {
             return `
