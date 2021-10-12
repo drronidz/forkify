@@ -1,4 +1,4 @@
-import View from "./view";
+import View from "./View";
 import icons from 'url:../../img/icons.svg'
 
 class PaginationView extends View{

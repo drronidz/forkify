@@ -3,11 +3,14 @@ import icons from 'url:../../img/icons.svg'
 export default class View {
     _recipeDATA
 
-    render(recipeDATA) {
+    render(recipeDATA, render = true) {
         if(!recipeDATA || (Array.isArray(recipeDATA) && recipeDATA.length === 0))
             return this.renderError()
         this._recipeDATA = recipeDATA
         const markup = this._generateMarkup()
+
+        if(!render) return markup
+
         this._clear()
         this._parentElement.insertAdjacentHTML('afterbegin', markup)
     }

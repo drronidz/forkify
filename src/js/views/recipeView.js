@@ -1,7 +1,7 @@
 // import icons from '../img/icons.svg'  // Parcel 1
 import icons from 'url:../../img/icons.svg' // Parcel 2
 import {Fraction} from 'fractional'
-import View from "./view.js"; // The parent class
+import View from "./View.js"; // The parent class
 
 
 class RecipeView extends View{

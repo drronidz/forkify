@@ -5,6 +5,7 @@ import recipeView from "./views/recipeView.js";
 import searchView from "./views/searchView.js";
 import resultView from "./views/resultView.js";
 import paginationView from "./views/paginationView.js";
+import bookmarkView from  "./views/bookmarkView";
 
 
 const controlRecipe = async function () {
@@ -17,6 +18,7 @@ const controlRecipe = async function () {
 
     // 0) Update results view to mark selected search result
     resultView.update(model.getSearchResultsPage())
+    bookmarkView.update(model.state.bookmarks)
 
     // 1) Loading recipe
     await model.loadRecipe(id)
@@ -75,10 +77,15 @@ const controlServings = function (newServings) {
 }
 
 const controlAddBookMark = function () {
+  // 1) ADD/REMOVE a bookmark
   if (!model.state.recipe.bookmarked) {model.addBookMARK(model.state.recipe)}
   else { model.deleteBookMARK(model.state.recipe.id)}
-  console.log(model.state.recipe)
+
+  // 2) Update recipe view
   recipeView.update(model.state.recipe)
+
+  // 3) Render bookmarks
+  bookmarkView.render(model.state.bookmarks)
 }
 
 const init = function () {
