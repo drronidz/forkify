@@ -1,7 +1,7 @@
 import {API_URL, RESULT_PER_PAGE} from "./config.js";
-import {getJSON, sendJSON} from "./helpers.js";
 import recipeView from "./views/recipeView";
 import {KEY} from "./config";
+import {AJAX} from "./helpers";
 
 export const state = {
     recipe: {},
@@ -31,7 +31,7 @@ const createRecipeObject = function(data) {
 }
 export const loadRecipe = async function (id) {
     try {
-        const data = await getJSON(`${API_URL}${id}`)
+        const data = await AJAX(`${API_URL}${id}?key=${KEY}`)
         state.recipe = createRecipeObject(data)
 
         if(state.bookmarks.some(bookmark => bookmark.id === id)) {
@@ -50,7 +50,7 @@ export const loadRecipe = async function (id) {
 }
 export const loadSearchResults = async function (query) {
     try {
-        const data = await getJSON(`${API_URL}?search=${query}`)
+        const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`)
         console.log(data)
         state.search.query = query
         state.search.results = data.data.recipes.map(recipe => {
@@ -58,7 +58,8 @@ export const loadSearchResults = async function (query) {
                 id: recipe.id,
                 title: recipe.title,
                 publisher: recipe.publisher,
-                imageURL: recipe.image_url
+                imageURL: recipe.image_url,
+                ...(recipe.key && {key: recipe.key})
             }
         })
         state.search.page = 1
@@ -138,9 +139,10 @@ export const uploadRecipe = async function (newRecipe) {
                 entry[1] !== ''
             )
             .map(ingredient => {
-                const ingredientArray = ingredient[1]
-                    .replaceAll(' ', '')
-                    .split(',')
+                const ingredientArray = ingredient[1].split(',').map(element => element.trim())
+                // const ingredientArray = ingredient[1]
+                //     .replaceAll(' ', '')
+                //     .split(',')
                 if(ingredientArray.length !== 3)
                     throw new Error(
                         'Wrong ingredient format! please use the correct one'
@@ -160,7 +162,7 @@ export const uploadRecipe = async function (newRecipe) {
             ingredients
         }
         console.log(recipe)
-        const data = await sendJSON(`${API_URL}?key=${KEY}`, recipe)
+        const data = await AJAX(`${API_URL}?key=${KEY}`, recipe)
         state.recipe = createRecipeObject(data)
         addBookMARK(state.recipe)
     }
