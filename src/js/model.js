@@ -1,6 +1,7 @@
 import {API_URL, RESULT_PER_PAGE} from "./config.js";
-import {getJSON} from "./helpers.js";
+import {getJSON, sendJSON} from "./helpers.js";
 import recipeView from "./views/recipeView";
+import {KEY} from "./config";
 
 export const state = {
     recipe: {},
@@ -12,22 +13,27 @@ export const state = {
     },
     bookmarks: []
 }
-
+const createRecipeObject = function(data) {
+    const {recipe} = data.data
+    return {
+        id: recipe.id,
+        title: recipe.title,
+        publisher: recipe.publisher,
+        sourceURL: recipe.source_url,
+        imageURL: recipe.image_url,
+        cookingTime: recipe.cooking_time,
+        servings: recipe.servings,
+        ingredients: recipe.ingredients,
+        // conditionally add properties to an object
+        // if the key property exists in the recipe object then add it as a property
+        ...(recipe.key && {key: recipe.key})
+    }
+}
 export const loadRecipe = async function (id) {
     try {
         const data = await getJSON(`${API_URL}${id}`)
+        state.recipe = createRecipeObject(data)
 
-        const {recipe} = data.data
-        state.recipe = {
-            id: recipe.id,
-            title: recipe.title,
-            publisher: recipe.publisher,
-            sourceURL: recipe.source_url,
-            imageURL: recipe.image_url,
-            cookingTime: recipe.cooking_time,
-            servings: recipe.servings,
-            ingredients: recipe.ingredients,
-        }
         if(state.bookmarks.some(bookmark => bookmark.id === id)) {
             state.recipe.bookmarked = true
         }
@@ -116,8 +122,51 @@ export const deleteBookMARK = function (id) {
     persistBookMARK()
 }
 
-// const clearBookMARK = function () {
-//     localStorage.clear('bookmarks')
-// }
-//
+const clearBookMARK = function () {
+    localStorage.clear('bookmarks')
+}
+
 // clearBookMARK()
+
+export const uploadRecipe = async function (newRecipe) {
+    try {
+        const ingredients = Object
+            .entries(newRecipe)
+            .filter(entry =>
+                entry[0].startsWith('ingredient')
+                &&
+                entry[1] !== ''
+            )
+            .map(ingredient => {
+                const ingredientArray = ingredient[1]
+                    .replaceAll(' ', '')
+                    .split(',')
+                if(ingredientArray.length !== 3)
+                    throw new Error(
+                        'Wrong ingredient format! please use the correct one'
+                    )
+
+                const [quantity, unit, description] = ingredientArray
+
+                return {quantity:quantity ? +quantity : null, unit, description}
+            })
+        const recipe = {
+            title: newRecipe.title,
+            source_url: newRecipe.sourceUrl,
+            image_url: newRecipe.image,
+            publisher: newRecipe.publisher,
+            cooking_time: +newRecipe.cookingTime,
+            servings: +newRecipe.servings,
+            ingredients
+        }
+        console.log(recipe)
+        const data = await sendJSON(`${API_URL}?key=${KEY}`, recipe)
+        state.recipe = createRecipeObject(data)
+        addBookMARK(state.recipe)
+    }
+    catch (error) {
+        throw error
+    }
+
+}
+

@@ -7,6 +7,7 @@ import resultView from "./views/resultView.js";
 import paginationView from "./views/paginationView.js";
 import bookmarkView from  "./views/bookmarkView";
 import addRecipeView from "./views/addRecipeView";
+import {MODAL_CLOSE_DURATION} from "./config";
 
 
 const controlRecipe = async function () {
@@ -93,10 +94,29 @@ const controlInitializeBookMark = function () {
     bookmarkView.render(model.state.bookmarks)
 }
 
-const controlAddRecipe = function (newRecipe) {
-  console.log(newRecipe)
+const controlAddRecipe = async function (newRecipe) {
+  try {
+    // Show loading spinner
+    addRecipeView.renderSpinner()
 
-  // Upload the new recipe data
+    // Upload the new recipe data
+    await model.uploadRecipe(newRecipe)
+    console.log(model.state.recipe)
+
+    // Render recipe
+    recipeView.render(model.state.recipe)
+
+    // Success message
+    addRecipeView.renderMessage()
+
+    // Close form window
+    setTimeout(function () {
+      addRecipeView.toggleWindow()
+    }, MODAL_CLOSE_DURATION)
+  } catch (error) {
+    console.log('***', error)
+    addRecipeView.renderError(error.message)
+  }
 }
 
 const init = function () {
